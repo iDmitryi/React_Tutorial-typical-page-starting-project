@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -11,20 +11,43 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  // will run only when exists component modifications, because no dependencies
+  useEffect(() => {
+    console.log("EFFECT RUNNING");
+
+    return () => {
+      console.log("EFFECT CLEANUP");
+    };
+  }, []);
+
+  // will run every time changes states for dependencies (enteredPassword, enteredEmail)
+  useEffect(() => {
+    // do the validity after 0.5 seconds
+    const timerID = setTimeout(() => {
+      console.log("inside use effect, with timer");
+
+      // because of clearTimeout in the return, this function will run rarely,
+      // which may be useful when sending HTTP requests, for example
+      setFormIsValid(
+        enteredPassword.trim().length > 6 && enteredEmail.includes("@")
+      );
+    }, 500);
+
+    // cleanup functions
+    return () => {
+      console.log("cleanup");
+
+      // browser function to clean timer
+      clearTimeout(timerID);
+    };
+  }, [enteredPassword, enteredEmail]);
+
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-
-    setFormIsValid(
-      event.target.value.includes("@") && enteredPassword.trim().length > 3
-    );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes("@")
-    );
   };
 
   const validateEmailHandler = () => {
