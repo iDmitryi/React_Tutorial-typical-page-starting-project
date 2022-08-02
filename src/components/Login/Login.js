@@ -11,6 +11,7 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+<<<<<<< HEAD
   // will run only when exists component modifications, because no dependencies
   useEffect(() => {
     console.log("EFFECT RUNNING");
@@ -40,6 +41,12 @@ const Login = (props) => {
       // browser function to clean timer
       clearTimeout(timerID);
     };
+=======
+  useEffect(() => {
+    setFormIsValid(
+      enteredPassword.trim().length > 6 && enteredEmail.includes("@")
+    );
+>>>>>>> 04be674e4ce7e667445ba978bb42688f1acb7d6b
   }, [enteredPassword, enteredEmail]);
 
   const emailChangeHandler = (event) => {
